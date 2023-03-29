@@ -101,6 +101,18 @@ public class LogowanieTest {
     }
   }
 
+  public void addToCart(WebDriver driver,String product,String selector){
+    if (selector.equals("css")) {
+      driver.findElement(By.cssSelector(product)).click();
+    }
+    if (selector.equals("xpath")) {
+      driver.findElement(By.xpath(product)).click();
+    }
+    if (selector.equals("name")) {
+      driver.findElement(By.name(product)).click();
+    }
+  }
+
   @Test
   public void gotoaddress() {
     loadPage(driverEdge, "https://www.saucedemo.com/");
