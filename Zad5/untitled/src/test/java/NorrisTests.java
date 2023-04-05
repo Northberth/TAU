@@ -45,8 +45,8 @@ public class NorrisTests {
                 "    \"url\": \"https://api.chucknorris.io/jokes/ojw-faz_tbglq0q4sgwt8w\"\n" +
                 "    \"value\": \"Chuck Norris doesn't churn butter. He roundhouse kicks the cows and the butter comes straight out.\"\n" +
                 "}");
-        String draw = norris.randomCategory(url+"/random?category=food");
-        Assert.assertEquals(draw,"{\n" +
+        String randomCategory = norris.randomCategory(url+"/random?category=food");
+        Assert.assertEquals(randomCategory,"{\n" +
                 "    \"categories\": [\"food\"],\n" +
                 "    \"created_at\": \"2020-01-05 13:42:19.576875\",\n" +
                 "    \"icon_url\": \"https://assets.chucknorris.host/img/avatar/chuck-norris.png\",\n" +
