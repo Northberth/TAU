@@ -1,4 +1,5 @@
 import random
+import pytest
 
 board = [' ' for x in range(56)]
 field = 0
@@ -30,25 +31,27 @@ def main():
 		i = move()
 def move():
 	try:
-		global field
-		print(field)
 		move = input("Podaj ruch: up - ruch w górę, down - ruch w dół, left - ruch w lewo, right - ruch w prawo\n A - start, B - koniec, X - przeszkoda, P - gracz\n")
-		if board[availableMove(move)] == ' ':
-			board[availableMove(move)] = "P"
-			field = availableMove(move)
-			print(field)
-		elif board[availableMove(move)] == 'B':
-			print("Wygrałeś!")
-			return 0
-		else:
-			print("Ruch niedozwolony\n")
-		print_board(board)
-		print("\n")
-		return 1
+		return move_validation(move)
 	except ValueError:
-		print("Nieprawidłowy wpis. Podaj intową liczbę\n")
+		print("Nieprawidłowy wpis. Podaj up, down, left lub right\n")
 
-def availableMove(move):
+def move_validation(move):
+	global field
+	if board[available_move(move)] == ' ':
+		board[available_move(move)] = "P"
+		field = available_move(move)
+		print(field)
+	elif board[available_move(move)] == 'B':
+		print("Wygrałeś!")
+		return 0
+	else:
+		print("Ruch niedozwolony\n")
+	print_board(board)
+	print("\n")
+	return 1
+
+def available_move(move):
 	global field
 	if move == "up":
 		if field-10 > 11:
@@ -71,5 +74,38 @@ def availableMove(move):
 				board[field] = " "
 			return field-1
 	return field
-
 main()
+
+right_fields = [15,25,35,45,55]
+left_fields = [11,21,31,41,51]
+top_fields = [11,12,13,14,15]
+bottom_fields = [51,52,53,54,55]
+"""
+@pytest.mark.parametrize("actual_fields_right", right_fields)
+def test_right_border(actual_fields_right):
+	global field
+	field = actual_fields_right
+	board[field] = "P"
+	assert available_move("right") == field
+
+@pytest.mark.parametrize("actual_fields_left", left_fields)
+def test_left_border(actual_fields_left):
+	global field
+	field = actual_fields_left
+	board[field] = "P"
+	assert available_move("left") == field
+
+@pytest.mark.parametrize("actual_fields_top", top_fields)
+def test_top_border(actual_fields_top):
+	global field
+	field = actual_fields_top
+	board[field] = "P"
+	assert available_move("up") == field
+
+@pytest.mark.parametrize("actual_fields_bottom", bottom_fields)
+def test_bottom_border(actual_fields_bottom):
+	global field
+	field = actual_fields_bottom
+	board[field] = "P"
+	assert available_move("down") == field
+"""
