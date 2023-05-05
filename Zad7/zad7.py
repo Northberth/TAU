@@ -25,34 +25,46 @@ def main():
 	board[end] = "B"
 	print_board(board)
 	print("\n")
-	i = 0
-	while i<10:
-		move()
+	i = 1
+	while i>0:
+		i = move()
 def move():
 	try:
 		global field
 		print(field)
-		move = input("Podaj ruch: Numer wiersza/ Numer kolumny, A - start, B - koniec\n")
+		move = input("Podaj ruch: up - ruch w górę, down - ruch w dół, left - ruch w lewo, right - ruch w prawo\n A - start, B - koniec, X - przeszkoda, P - gracz\n")
 		if board[availableMove(move)] == ' ':
 			board[availableMove(move)] = "P"
 			field = availableMove(move)
 			print(field)
+		elif board[availableMove(move)] == 'B':
+			print("Wygrałeś!")
+			return 0
 		else:
 			print("Ruch niedozwolony\n")
 		print_board(board)
 		print("\n")
+		return 1
 	except ValueError:
 		print("Nieprawidłowy wpis. Podaj intową liczbę\n")
 
 def availableMove(move):
 	global field
 	if move == "up":
+		if field-10 < 11:
+			return field
 		return field-10
 	elif move == "down":
+		if field+10 > 55:
+			return field
 		return field+10
 	elif move == "right":
+		if field % 10 > 4:
+			return field
 		return field+1
 	elif move == "left":
+		if (field-1) % 10 == 0:
+			return field
 		return field-1
 	else:
 		return field
