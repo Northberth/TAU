@@ -51,21 +51,25 @@ def move():
 def availableMove(move):
 	global field
 	if move == "up":
-		if field-10 < 11:
-			return field
-		return field-10
+		if field-10 > 11:
+			if board[field] == "P":
+				board[field] = " "
+			return field-10
 	elif move == "down":
-		if field+10 > 55:
-			return field
-		return field+10
+		if field+10 < 56:
+			if board[field] == "P":
+				board[field] = " "
+			return field+10
 	elif move == "right":
-		if field % 10 > 4:
-			return field
-		return field+1
+		if (field + 1) % 10 < 6:
+			if board[field] == "P":
+				board[field] = " "
+			return field+1
 	elif move == "left":
-		if (field-1) % 10 == 0:
-			return field
-		return field-1
-	else:
-		return field
+		if (field-1) % 10 != 0:
+			if board[field] == "P":
+				board[field] = " "
+			return field-1
+	return field
+
 main()
