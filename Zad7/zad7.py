@@ -47,6 +47,7 @@ def move_validation(move):
 		return 0
 	else:
 		print("Ruch niedozwolony\n")
+		return 2
 	print_board(board)
 	print("\n")
 	return 1
@@ -74,13 +75,21 @@ def available_move(move):
 				board[field] = " "
 			return field-1
 	return field
-main()
+
+def static_board():
+	board[12] = "A"
+	board[54] = "B"
+	board[24] = "X"
+	board[32] = "X"
+	board[43] = "X"
+
+#main()
 
 right_fields = [15,25,35,45,55]
 left_fields = [11,21,31,41,51]
 top_fields = [11,12,13,14,15]
 bottom_fields = [51,52,53,54,55]
-"""
+
 @pytest.mark.parametrize("actual_fields_right", right_fields)
 def test_right_border(actual_fields_right):
 	global field
@@ -108,4 +117,27 @@ def test_bottom_border(actual_fields_bottom):
 	field = actual_fields_bottom
 	board[field] = "P"
 	assert available_move("down") == field
-"""
+
+def test_win():
+	static_board()
+	global field
+	field = 53
+	assert move_validation("right") == 0
+	field = 55
+	assert move_validation("left") == 0
+	field = 44
+	assert move_validation("down") == 0
+
+def test_obstacle_four_directions():
+	static_board()
+	global field
+	field = 23
+	assert move_validation("right") == 2
+	field = 25
+	assert move_validation("left") == 2
+	field = 34
+	assert move_validation("up") == 2
+	field = 14
+	assert move_validation("down") == 2
+
+
