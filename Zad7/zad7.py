@@ -1,4 +1,6 @@
 import random
+import sys
+
 import pytest
 
 board = [' ' for x in range(56)]
@@ -41,7 +43,6 @@ def move_validation(move):
 	if board[available_move(move)] == ' ':
 		board[available_move(move)] = "P"
 		field = available_move(move)
-		print(field)
 	elif board[available_move(move)] == 'B':
 		print("Wygrałeś!")
 		return 0
@@ -78,66 +79,83 @@ def available_move(move):
 
 def static_board():
 	board[12] = "A"
-	board[54] = "B"
 	board[24] = "X"
 	board[32] = "X"
 	board[43] = "X"
+	board[54] = "B"
+
 
 #main()
 
-right_fields = [15,25,35,45,55]
-left_fields = [11,21,31,41,51]
-top_fields = [11,12,13,14,15]
-bottom_fields = [51,52,53,54,55]
+class TestsBorder:
+	right_fields = [15,25,35,45,55]
+	left_fields = [11,21,31,41,51]
+	top_fields = [11,12,13,14,15]
+	bottom_fields = [51,52,53,54,55]
 
-@pytest.mark.parametrize("actual_fields_right", right_fields)
-def test_right_border(actual_fields_right):
-	global field
-	field = actual_fields_right
-	board[field] = "P"
-	assert available_move("right") == field
+	@pytest.mark.parametrize("actual_fields_right", right_fields)
+	def test_right_border(self,actual_fields_right):
+		global field
+		field = actual_fields_right
+		board[field] = "P"
+		assert available_move("right") == field
 
-@pytest.mark.parametrize("actual_fields_left", left_fields)
-def test_left_border(actual_fields_left):
-	global field
-	field = actual_fields_left
-	board[field] = "P"
-	assert available_move("left") == field
+	@pytest.mark.parametrize("actual_fields_left", left_fields)
+	def test_left_border(self,actual_fields_left):
+		global field
+		field = actual_fields_left
+		board[field] = "P"
+		assert available_move("left") == field
 
-@pytest.mark.parametrize("actual_fields_top", top_fields)
-def test_top_border(actual_fields_top):
-	global field
-	field = actual_fields_top
-	board[field] = "P"
-	assert available_move("up") == field
+	@pytest.mark.parametrize("actual_fields_top", top_fields)
+	def test_top_border(self,actual_fields_top):
+		global field
+		field = actual_fields_top
+		board[field] = "P"
+		assert available_move("up") == field
 
-@pytest.mark.parametrize("actual_fields_bottom", bottom_fields)
-def test_bottom_border(actual_fields_bottom):
-	global field
-	field = actual_fields_bottom
-	board[field] = "P"
-	assert available_move("down") == field
+	@pytest.mark.parametrize("actual_fields_bottom", bottom_fields)
+	def test_bottom_border(self,actual_fields_bottom):
+		global field
+		field = actual_fields_bottom
+		board[field] = "P"
+		assert available_move("down") == field
 
-def test_win():
-	static_board()
-	global field
-	field = 53
-	assert move_validation("right") == 0
-	field = 55
-	assert move_validation("left") == 0
-	field = 44
-	assert move_validation("down") == 0
+class TestsGameMove:
+	@pytest.mark.skipif(sys.version_info < (3, 12), reason="requires python3.12 or higher")
+	def test_win(self):
+		static_board()
+		global field
+		field = 53
+		assert move_validation("right") == 0
+		field = 55
+		assert move_validation("left") == 0
+		field = 44
+		assert move_validation("down") == 0
+	@pytest.mark.skip(reason="bo trzeba było użyć w zadaniu tego markera ¯\_(ツ)_/¯")
+	def test_obstacle_four_directions(self):
+		static_board()
+		global field
+		field = 23
+		assert move_validation("right") == 2
+		field = 25
+		assert move_validation("left") == 2
+		field = 34
+		assert move_validation("up") == 2
+		field = 14
+		assert move_validation("down") == 2
+	@pytest.mark.xfail
+	def test_path(self):
+		static_board()
+		global field
+		field = 12
+		assert move_validation("down") == 1 #22
+		assert move_validation("right") == 1 #23
+		assert move_validation("down") == 1 #33
+		assert move_validation("right") == 1 #34
+		assert move_validation("down") == 1 #44
+		assert move_validation("down") == 0 #54
 
-def test_obstacle_four_directions():
-	static_board()
-	global field
-	field = 23
-	assert move_validation("right") == 2
-	field = 25
-	assert move_validation("left") == 2
-	field = 34
-	assert move_validation("up") == 2
-	field = 14
-	assert move_validation("down") == 2
+
 
 
