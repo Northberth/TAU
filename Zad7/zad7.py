@@ -84,8 +84,18 @@ def static_board():
 	board[43] = "X"
 	board[54] = "B"
 
+def clear_board():
+	global board
+	board = [' ' for x in range(56)]
+
 
 #main()
+def setup():
+	static_board()
+	print("\nboard built")
+def teardown():
+	clear_board()
+	print("\ncleaned board")
 
 class TestsBorder:
 	right_fields = [15,25,35,45,55]
@@ -124,7 +134,6 @@ class TestsBorder:
 class TestsGameMove:
 	@pytest.mark.skipif(sys.version_info < (3, 12), reason="requires python3.12 or higher")
 	def test_win(self):
-		static_board()
 		global field
 		field = 53
 		assert move_validation("right") == 0
@@ -134,7 +143,6 @@ class TestsGameMove:
 		assert move_validation("down") == 0
 	@pytest.mark.skip(reason="bo trzeba było użyć w zadaniu tego markera ¯\_(ツ)_/¯")
 	def test_obstacle_four_directions(self):
-		static_board()
 		global field
 		field = 23
 		assert move_validation("right") == 2
@@ -146,7 +154,6 @@ class TestsGameMove:
 		assert move_validation("down") == 2
 	@pytest.mark.xfail
 	def test_path(self):
-		static_board()
 		global field
 		field = 12
 		assert move_validation("down") == 1 #22
